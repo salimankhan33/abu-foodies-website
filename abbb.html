@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Abu Foodies | Fast Food Restaurant</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+body { background-color: #fffaf5; color: #333; line-height: 1.6; }
+header { background: linear-gradient(to right, #ff7a18, #ffb347); color: white; padding: 20px 0; text-align: center; }
+header h1 { font-size: 2.5rem; }
+header p { font-size: 1.1rem; margin-top: 5px; }
+nav { background-color: #222; padding: 10px 0; text-align: center; }
+nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+nav a:hover { color: #ffb347; }
+.hero { padding: 60px 20px; text-align: center; background: url('https://images.unsplash.com/photo-1550547660-d9450f859349') no-repeat center/cover; color: white; }
+.hero h2 { font-size: 2.2rem; margin-bottom: 10px; }
+.hero p { font-size: 1.2rem; margin-bottom: 20px; }
+.btn { display: inline-block; padding: 12px 25px; background-color: #25D366; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 10px; }
+.btn:hover { background-color: #1ebe5d; }
+section { padding: 50px 20px; max-width: 1100px; margin: auto; }
+section h2 { text-align: center; margin-bottom: 30px; font-size: 2rem; color: #ff7a18; }
+.menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.menu-item { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; position: relative; }
+.menu-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 10px; }
+.menu-item h3 { margin-bottom: 10px; color: #333; }
+.menu-item .edit-btn, .menu-item .delete-btn { position: absolute; top: 10px; right: 10px; padding: 4px 8px; font-size: 0.8rem; border: none; border-radius: 4px; cursor: pointer; color: white; }
+.menu-item .edit-btn { background-color: #ffb347; right: 70px; }
+.menu-item .delete-btn { background-color: #ff6347; }
+.about { text-align: center; background-color: #fff0e0; border-radius: 10px; padding: 30px; }
+.contact { text-align: center; }
+.admin { background-color: #f8f8f8; border-radius: 10px; padding: 30px; margin-top: 40px; max-width: 700px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.admin input, .admin button { padding: 8px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc; width: 100%; }
+.admin button { background-color: #ff7a18; color: white; border: none; cursor: pointer; font-weight: bold; }
+.admin button:hover { background-color: #ffb347; }
+footer { background-color: #222; color: white; text-align: center; padding: 15px 0; margin-top: 40px; }
+@media (max-width: 600px) { header h1 { font-size: 2rem; } .hero h2 { font-size: 1.8rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Abu Foodies</h1>
+  <p>Delicious Fast Food • Since 2018</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#menu">Menu</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+  <a href="#admin">Admin</a>
+</nav>
+
+<div class="hero" id="home">
+  <h2>Fresh, Tasty & Home Made</h2>
+  <p>All ingredients are 100% home made</p>
+  <a class="btn" href="https://wa.me/923152569250" target="_blank">Order on WhatsApp</a>
+</div>
+
+<section id="menu">
+  <h2>Our Menu</h2>
+  <div class="menu" id="menuList">
+    <!-- Initial Menu Items -->
+  </div>
+</section>
+
+<section id="about">
+  <h2>About Us</h2>
+  <div class="about">
+    <p>
+      Abu Foodies is serving delicious fast food since 2018. We believe in quality,
+      freshness, and taste. All our ingredients and sauces are home made to ensure
+      the best flavor and hygiene for our customers.
+    </p>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Contact & Order</h2>
+  <div class="contact">
+    <p><strong>WhatsApp:</strong> 0315-2569250</p>
+    <p>Fast ordering through WhatsApp</p>
+    <br />
+    <a class="btn" href="https://wa.me/923152569250" target="_blank">Chat on WhatsApp</a>
+  </div>
+</section>
+
+<section id="admin">
+  <h2>Admin Panel</h2>
+  <div class="admin">
+    <p>Only admin can manage menu items.</p>
+    <input type="email" id="adminEmail" placeholder="Admin Email">
+    <input type="text" id="itemName" placeholder="Item Name">
+    <input type="text" id="itemDesc" placeholder="Item Description">
+    <input type="text" id="itemImg" placeholder="Image URL">
+    <button onclick="previewItem()">Preview Item</button>
+    <button onclick="addMenuItem()">Add Menu Item</button>
+    <div id="preview" style="margin-top:15px;"></div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2018 - 2026 Abu Foodies | All Rights Reserved</p>
+</footer>
+
+<script>
+const ADMIN_EMAIL = "foodiesabu@gmail.com";
+const menuList = document.getElementById('menuList');
+
+// Sample initial menu
+const initialMenu = [
+  {name:"Zinger Burger", desc:"Crispy chicken with special sauce", img:"zinger.jpg"},
+  {name:"Shawarma", desc:"Juicy chicken with fresh salad", img:"shawarma.jpg"},
+  {name:"Tortilla Wrap", desc:"Soft tortilla with tasty filling", img:"trotilla wrap.jpg"},
+  {name:"French Fries", desc:"Golden & crispy fries", img:"french fries.jpg"},
+  {name:"Special Dip Sauces", desc:"Home made unique flavors", img:"dipsauces.jpg"},
+  {name:"Cheese", desc:"Extra cheesy delight", img:"cheese.jpg"},
+  {name:"Pizza", desc:"Hot & cheesy pizza with your choice of toppings", img:"pizza.jpg"}
+];
+
+function renderMenuItem(item) {
+  const div = document.createElement('div');
+  div.className = "menu-item";
+  div.innerHTML = `
+    <img src="${item.img}" alt="${item.name}">
+    <h3>${item.name}</h3>
+    <p>${item.desc}</p>
+    <a class="btn" href="https://wa.me/923152569250?text=I%20want%20to%20order%20${encodeURIComponent(item.name)}" target="_blank">Order Now</a>
+    <button class="edit-btn" onclick="editMenuItem(this)">Edit</button>
+    <button class="delete-btn" onclick="deleteMenuItem(this)">Delete</button>
+  `;
+  menuList.appendChild(div);
+}
+
+// Render initial menu
+initialMenu.forEach(item => renderMenuItem(item));
+
+function addMenuItem() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const name = document.getElementById('itemName').value.trim();
+  const desc = document.getElementById('itemDesc').value.trim();
+  const img = document.getElementById('itemImg').value.trim();
+
+  if(email !== ADMIN_EMAIL) { alert("Only admin can add menu items!"); return; }
+  if(!name || !desc || !img) { alert("Please fill all fields."); return; }
+
+  renderMenuItem({name, desc, img});
+
+  document.getElementById('itemName').value = "";
+  document.getElementById('itemDesc').value = "";
+  document.getElementById('itemImg').value = "";
+  document.getElementById('adminEmail').value = "";
+  document.getElementById('preview').innerHTML = "";
+}
+
+function previewItem() {
+  const name = document.getElementById('itemName').value.trim();
+  const desc = document.getElementById('itemDesc').value.trim();
+  const img = document.getElementById('itemImg').value.trim();
+
+  if(!name || !desc || !img) { alert("Fill all fields to preview."); return; }
+
+  document.getElementById('preview').innerHTML = `
+    <h4>Preview:</h4>
+    <div style="border:1px solid #ccc; padding:10px; border-radius:5px;">
+      <img src="${img}" alt="${name}" style="width:100%; height:120px; object-fit:cover; border-radius:5px;">
+      <h3>${name}</h3>
+      <p>${desc}</p>
+    </div>
+  `;
+}
+
+function deleteMenuItem(btn) {
+  if(!confirm("Are you sure you want to delete this item?")) return;
+  btn.parentElement.remove();
+}
+
+function editMenuItem(btn) {
+  const item = btn.parentElement;
+  const name = item.querySelector('h3').innerText;
+  const desc = item.querySelector('p').innerText;
+  const img = item.querySelector('img').src;
+
+  document.getElementById('itemName').value = name;
+  document.getElementById('itemDesc').value = desc;
+  document.getElementById('itemImg').value = img;
+
+  item.remove();
+}
+</script>
+
+</body>
+</html>
